@@ -1,0 +1,14 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.dot {
+  fill: steelblue;
+  stroke: #000;
+}
+circle[class~=circle-hidden]{
+	opacity: 0.2;
+	fill: steelblue;
+}

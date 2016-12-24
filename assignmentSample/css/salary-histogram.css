@@ -1,0 +1,32 @@
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+  fill-opacity: .9;
+}
+.append-bar{
+  fill: steelblue;
+  fill-opacity: .9;
+}
+rect[class~=rect-hidden]{
+	opacity: 0.2;
+	fill: steelblue;
+}
+rect[class~=rect-highlight]{
+	opacity: 1;
+	fill: steelblue;
+}
+label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

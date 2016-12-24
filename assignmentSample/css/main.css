@@ -1,0 +1,71 @@
+//在main.css中设定各个界面的位置
+//统一设定好全局的字体大小以及类型
+body {
+  font: 10px sans-serif;
+}
+#scatter-plot{
+	position: absolute;
+	top: 50px;
+	bottom: 0%;
+	left: 0%;
+	right: 70%;
+	padding: 10px 10px 10px 10px;
+}
+#scatter-plot1{
+	position: absolute;
+	top: 15%;
+	bottom: 25%;
+	right: 0%;
+	left: 0%; 
+}
+#scatter-plot1-text{
+	position: absolute;
+	top:0%;
+	bottom: 90%;
+	right: 0%;
+	left: 0%; 
+	font-size: 15px;
+	padding-top: 5px;
+	text-align: center;
+}
+#scatter-plot1-svg{
+	position: absolute;
+	top:5%;
+	bottom: 0%;
+	right: 0%;
+	left: 0%; 
+}
+#histogram{
+	position: absolute;
+	top: 50px;
+	bottom: 0%;
+	left: 30%;
+	right: 0%;
+}
+#salary-histogram{
+	position: absolute;
+	top: 15%;
+	bottom: 25%;
+	right: 0%;
+	left: 0%;
+	border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: gray;
+}
+#salary-histogram-text{
+	position: absolute;
+	top:0%;
+	bottom: 90%;
+	right: 0%;
+	left: 0%;
+	font-size: 15px; 
+	padding-top: 5px;
+	text-align: center;
+}
+#salary-histogram-svg{
+	position: absolute;
+	top:5%;
+	bottom: 0%;
+	right: 0%;
+	left: 0%; 
+}

@@ -1,22 +1,27 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+    <meta charset="utf-8">
+    <title>Line Chart</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+
 </head>
+
 <body>
-	<div id="visualization">
-		<div id="scatter-plot">
-			<div id="scatter-plot-text">
-				<p id="scatter-plot-title">Scatter Plot</p>
-			</div>
-			<div id="scatter-plot-svg">
-				
-			</div>
-		</div>
-		<div id="histogram">
-			
-		</div>
+
+
+	<div class="control-group">
+	    <button onclick="update()">Update</button>
 	</div>
 
+	<script type="text/javascript" src="libs/d3-dist/d3.v4.js"></script>
+	<script type="text/javascript" src="libs/jquery-dist/jquery.min.js"></script>
+	<script type="text/javascript" src="libs/less-dist/less.min.js"></script>
+	<script type="text/javascript" src="scripts/scatter-plot.js"></script>
+<!-- 	<script type="text/javascript" src="scripts/salary-histogram.js"></script>
+	<script type="text/javascript" src="scripts/main.js"></script> -->
 </body>
+
 </html>

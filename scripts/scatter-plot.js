@@ -234,7 +234,9 @@ d3.csv("../data/2015.csv", function(error, datum) {
     chart.y(d3.scale.linear().domain(d3.extent(datum, function(d) { return d.PO; })).nice());
     data.push(d3.range(numberOfDataPoint).map(function (i) {
         return {x: d.PO, y: d.A};
+  	}));
   });
+});
 
 
 //数据更新

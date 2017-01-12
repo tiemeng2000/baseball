@@ -1,8 +1,8 @@
 function scatterPlotChart () {
     var _chart = {};
 
-    var _width = 500, _height = 500,
-            _margins = {top: 30, left: 30, right: 30, bottom: 30},
+    var _width = 600, _height = 600,
+            _margins = {top: 40, left: 40, right: 40, bottom: 40},
             _x, _y,
             _data = [],
             _colors = d3.scaleOrdinal(d3.schemeCategory10),
@@ -40,7 +40,7 @@ function scatterPlotChart () {
     }
     
     function renderXAxis(axesG){
-        _x = d3.scaleLinear().range([0, quadrantWidth()]);
+        //_x = d3.scaleLinear().range([0, quadrantWidth()]);
         var xAxis = d3.axisBottom(_x);        
 
         axesG.append("g")
@@ -60,7 +60,7 @@ function scatterPlotChart () {
     }
     
     function renderYAxis(axesG){
-        _y = d3.scaleLinear().range([quadrantHeight(), 0]);
+        //_y = d3.scaleLinear().range([quadrantHeight(), 0]);
         var yAxis = d3.axisLeft(_y);
                 
         axesG.append("g")
@@ -80,7 +80,7 @@ function scatterPlotChart () {
     }
 
     function defineBodyClip(svg) {
-        var padding = 5;
+        var padding = 40;
 
         svg.append("defs")
                 .append("clipPath")
@@ -192,8 +192,8 @@ function scatterPlotChart () {
 
     _chart.pushData = function (d) {
         _data.push(d);
-        _x = d3.scaleLinear().range([0, _width]);
-        _y = d3.scaleLinear().range([_height, 0]);
+        _x = d3.scaleLinear().range([0, quadrantWidth()]);
+        _y = d3.scaleLinear().range([quadrantHeight(), 0]);
         _x.domain(d3.extent(_data, function(d) { return d.A; })).nice();
         _y.domain(d3.extent(_data, function(d) { return d.PO; })).nice();
 

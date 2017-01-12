@@ -118,7 +118,7 @@ function scatterPlotChart () {
 
         //update
         _bodyG.selectAll("circle").data(_data)
-                .attr("r", 2.5)
+                .attr("r", 1.5)
                 .attr("cx", function(d) { return _x(d.A); })
                 .attr("cy", function(d) { return _y(d.PO); })
                 .style("fill", function(d) { return "steelblue"; })

@@ -5,10 +5,10 @@ function scatterPlotChart () {
             _margins = {top: 30, left: 30, right: 30, bottom: 30},
             _x, _y,
             _data = [],
-            _colors = d3.scale.category10(),
+            _colors = d3.scaleOrdinal(d3.schemeCategory10),
             _svg,
             _bodyG,
-            _symbolTypes = d3.scale.ordinal() // <-A
+            _symbolTypes = d3.scaleOrdinal() // <-A
                     .range(["circle",
                         "cross",
                         "diamond",
@@ -40,9 +40,8 @@ function scatterPlotChart () {
     }
     
     function renderXAxis(axesG){
-        var xAxis = d3.svg.axis()
-                .scale(_x.range([0, quadrantWidth()]))
-                .orient("bottom");        
+        _x = d3.scaleLinear().range([0, quadrantWidth()]);
+        var xAxis = d3.axisBottom(_x);        
 
         axesG.append("g")
                 .attr("class", "x axis")
@@ -61,9 +60,8 @@ function scatterPlotChart () {
     }
     
     function renderYAxis(axesG){
-        var yAxis = d3.svg.axis()
-                .scale(_y.range([quadrantHeight(), 0]))
-                .orient("left");
+        _y = d3.scaleLinear().range([quadrantHeight(), 0]);
+        var yAxis = d3.axisLeft(_y);
                 
         axesG.append("g")
                 .attr("class", "y axis")
@@ -107,29 +105,24 @@ function scatterPlotChart () {
     }
 
     function renderSymbols() { // <-B
-        _data.forEach(function (list, i) {
-            _bodyG.selectAll("path._" + i)
-                        .data(list)
-                    .enter()
-                    .append("path")
-                    .attr("class", "symbol _" + i);
+            
+        //enter
+        _bodyG.selectAll("circle").data(_data)
+                .enter()
+                .append("circle")
+                .attr("class", "dot");                 
 
-            _bodyG.selectAll("path._" + i)
-                    .data(list)
-                        .classed(_symbolTypes(i), true)
-                    .transition() // <-C
-                        .attr("transform", function(d){
-                            return "translate(" // <-D
-                                    + _x(d.x) 
-                                    + "," 
-                                    + _y(d.y) 
-                                    + ")";
-                        })
-                        .attr("d", 
-                            d3.svg.symbol() // <-E
-                                .type(_symbolTypes(i))
-                        ); 
-        });
+        //exit
+        _bodyG.selectAll("circle").data(_data)
+                .exit().remove();
+
+        //update
+        _bodyG.selectAll("circle").data(_data)
+                .attr("r", 2.5)
+                .attr("cx", function(d) { return _x(d.A); })
+                .attr("cy", function(d) { return _y(d.PO); })
+                .style("fill", function(d) { return "steelblue"; })
+                .style("stroke", function(d){return "black"});  
     }
 
     function xStart() {
@@ -192,58 +185,35 @@ function scatterPlotChart () {
         return _chart;
     };
 
-    _chart.addSeries = function (series) {
-        _data.push(series);
+
+    _chart.data = function (dt) {
+        if (!arguments.length) return _data;
+    };
+
+    _chart.pushData = function (d) {
+        _data.push(d);
+        _x = d3.scaleLinear().range([0, _width]);
+        _y = d3.scaleLinear().range([_height, 0]);
+        _x.domain(d3.extent(_data, function(d) { return d.A; })).nice();
+        _y.domain(d3.extent(_data, function(d) { return d.PO; })).nice();
+
         return _chart;
     };
+    
 
     return _chart;
 }
 
 
-function randomData() {
-    return Math.random() * 9;
-}
+var chart = scatterPlotChart();
 
-function update() {
-    for (var i = 0; i < data.length; ++i) {
-        var series = data[i];
-        series.length = 0;
-        for (var j = 0; j < numberOfDataPoint; ++j)
-            series.push({x: randomData(), y: randomData()});
-    }
-
-    chart.render();
-}
-
-
-
-//数据
-var numberOfSeries = 5,
-    numberOfDataPoint = 11,
-    data = [];
-
-var chart  = scatterPlotChart();
-
-d3.csv("../data/2015.csv", function(error, datum) {
+d3.csv("data/2015.csv", function(error, dataset) {
   if (error) throw error;
-  datum.forEach(function(d) {
+  dataset.forEach(function(d) {
     d.PO = +d.PO;
     d.A = +d.A;
-    chart.x(d3.scale.linear().domain(d3.extent(datum, function(d) { return d.A; })).nice());
-    chart.y(d3.scale.linear().domain(d3.extent(datum, function(d) { return d.PO; })).nice());
-    data.push(d3.range(numberOfDataPoint).map(function (i) {
-        return {x: d.PO, y: d.A};
-  	}));
+    chart.pushData({A: d.A, PO: d.PO});
   });
+  chart.render();
 });
 
-
-//数据更新
-data.forEach(function (series) {
-    chart.addSeries(series);
-});
-
-
-//绘制
-chart.render();

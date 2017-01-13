@@ -8,6 +8,7 @@ function scatterPlotChart () {
             _colors = d3.scaleOrdinal(d3.schemeCategory10),
             _svg,
             _bodyG,
+            _brush,
             _symbolTypes = d3.scaleOrdinal() // <-A
                     .range(["circle",
                         "cross",
@@ -102,6 +103,7 @@ function scatterPlotChart () {
                     .attr("clip-path", "url(#body-clip)");
 
         renderSymbols();
+        addBrush();
     }
 
     function renderSymbols() { // <-B
@@ -118,11 +120,70 @@ function scatterPlotChart () {
 
         //update
         _bodyG.selectAll("circle").data(_data)
-                .attr("r", 1.5)
+                .attr("r", 2.5)
                 .attr("cx", function(d) { return _x(d.A); })
-                .attr("cy", function(d) { return _y(d.PO); })
-                .style("fill", function(d) { return "steelblue"; })
-                .style("stroke", function(d){return "black"});  
+                .attr("cy", function(d) { return _y(d.PO); });
+                //.style("fill", function(d) { return "steelblue"; })
+                //.style("stroke", function(d){return "black"});  
+    }
+
+    function addBrush(){
+        _brush = d3.brush()
+            .extent([[0,0],[quadrantWidth(),quadrantHeight()]])
+            .on('start',brushstart)
+            .on('brush',brushmove)
+            .on('end',brushend);
+
+        _bodyG.call(_brush);
+        var brushCell;
+        var selectArray = new Array();
+        // Clear the previously-active brush, if any.
+        function brushstart(p) {
+            if (brushCell !== this) {
+              selectArray = new Array();
+              _bodyG.selectAll('.brush').call(_brush);
+              var selectArray = new Array();
+              brushCell = this;
+            }
+        }
+        // Highlight the selected circles.
+        function brushmove(p) {
+            var e=d3.event.selection;
+            var xmin=e[0][0],xmax=e[1][0];
+            var ymin=e[0][1],ymax=e[1][1];
+            d3.selectAll('.dot')
+            .style('fill',function(d) {
+                var x = d3.select(this).attr('cx');
+                var y = d3.select(this).attr('cy');
+                var circleId = d3.select(this).attr('id');
+                if(x>xmin&&x<xmax&&y>ymin&&y<ymax){
+                    d3.select(this).classed('circle-hidden', false);
+                    if(selectArray.indexOf(circleId)==-1){
+                      selectArray.push(circleId);
+                    }
+                }else{
+                    d3.select(this).classed('circle-hidden', true);
+                }
+            });
+            //salary_histogram.update(selectArray);
+        }
+        // If the brush is empty, select all circles.
+        function brushend(p) {
+            var e=d3.event.selection;
+            if(e != null){
+                var xmin=e[0][0],xmax=e[1][0];
+                var ymin=e[0][1],ymax=e[1][1];
+                if(((xmax - xmin) < 3)&&((ymax - ymin) < 3)){
+                  _bodyG.selectAll(".circle-hidden").classed("circle-hidden", false);
+                  selectArray = new Array(); 
+                }
+            }else{
+                _bodyG.selectAll(".circle-hidden").classed("circle-hidden", false);
+                selectArray = new Array(); 
+            }
+            //salary_histogram.update(selectArray);
+        }
+
     }
 
     function xStart() {

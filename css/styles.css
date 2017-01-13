@@ -159,8 +159,8 @@ button {
 }
 
 .dot {
-  fill: #fff;
-  stroke: steelblue;
+  fill: steelblue;
+  stroke: #000;
 }
 
 .area {
@@ -216,5 +216,10 @@ button {
 
 .bar{
     stroke: none;
+    fill: steelblue;
+}
+
+circle[class~=circle-hidden]{
+    opacity: 0.2;
     fill: steelblue;
 }

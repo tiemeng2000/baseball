@@ -2,35 +2,38 @@ function scatterPlotChart () {
     var _chart = {};
 
     var _width = 600, _height = 600,
-            _margins = {top: 40, left: 40, right: 40, bottom: 40},
-            _x, _y,
-            _data = [],
-            _colors = d3.scaleOrdinal(d3.schemeCategory10),
-            _svg,
-            _bodyG,
-            _brush,
-            _symbolTypes = d3.scaleOrdinal() // <-A
-                    .range(["circle",
-                        "cross",
-                        "diamond",
-                        "square",
-                        "triangle-down",
-                        "triangle-up"]);
-
+        _margins = {top: 40, left: 40, right: 40, bottom: 40},
+        _x, _y,
+        _data = [],
+        _colors = d3.scaleOrdinal(d3.schemeCategory10),
+        _svg,
+        _bodyG,
+        _brush,
+        _symbolTypes = d3.scaleOrdinal() // <-A
+                .range(["circle",
+                    "cross",
+                    "diamond",
+                    "square",
+                    "triangle-down",
+                    "triangle-up"]);
+    //渲染主函数
     _chart.render = function () {
         if (!_svg) {
             _svg = d3.select("body").append("svg")
                     .attr("height", _height)
                     .attr("width", _width);
-
+            //绘制坐标轴
             renderAxes(_svg);
 
+            //生成剪裁
             defineBodyClip(_svg);
         }
 
+        //可视化绘制
         renderBody(_svg);
     };
 
+    //渲染坐标轴函数
     function renderAxes(svg) {
         var axesG = svg.append("g")
                 .attr("class", "axes");
@@ -40,6 +43,7 @@ function scatterPlotChart () {
         renderYAxis(axesG);
     }
     
+    //渲染坐标轴-X轴
     function renderXAxis(axesG){
         //_x = d3.scaleLinear().range([0, quadrantWidth()]);
         var xAxis = d3.axisBottom(_x);        
@@ -60,6 +64,7 @@ function scatterPlotChart () {
                 .attr("y2", - quadrantHeight());
     }
     
+    //渲染坐标轴-Y轴
     function renderYAxis(axesG){
         //_y = d3.scaleLinear().range([quadrantHeight(), 0]);
         var yAxis = d3.axisLeft(_y);
@@ -80,6 +85,7 @@ function scatterPlotChart () {
                 .attr("y2", 0);
     }
 
+    //定义剪裁
     function defineBodyClip(svg) {
         var padding = 40;
 
@@ -93,6 +99,7 @@ function scatterPlotChart () {
                 .attr("height", quadrantHeight());
     }
 
+    //渲染可视化主体
     function renderBody(svg) {
         if (!_bodyG)
             _bodyG = svg.append("g")
@@ -102,10 +109,13 @@ function scatterPlotChart () {
                         + yEnd() + ")") 
                     .attr("clip-path", "url(#body-clip)");
 
+        //渲染符号
         renderSymbols();
+        //添加交互笔刷
         addBrush();
     }
 
+    //渲染符号函数
     function renderSymbols() { // <-B
             
         //enter
@@ -120,13 +130,12 @@ function scatterPlotChart () {
 
         //update
         _bodyG.selectAll("circle").data(_data)
-                .attr("r", 2.5)
+                .attr("r", 4.5)
                 .attr("cx", function(d) { return _x(d.A); })
                 .attr("cy", function(d) { return _y(d.PO); });
-                //.style("fill", function(d) { return "steelblue"; })
-                //.style("stroke", function(d){return "black"});  
     }
 
+    //添加交互笔刷函数
     function addBrush(){
         _brush = d3.brush()
             .extent([[0,0],[quadrantWidth(),quadrantHeight()]])
@@ -251,6 +260,7 @@ function scatterPlotChart () {
         if (!arguments.length) return _data;
     };
 
+    //关联数据及坐标尺度
     _chart.pushData = function (d) {
         _data.push(d);
         _x = d3.scaleLinear().range([0, quadrantWidth()]);

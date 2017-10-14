@@ -45,44 +45,51 @@ function scatterPlotChart () {
     
     //渲染坐标轴-X轴
     function renderXAxis(axesG){
-        //_x = d3.scaleLinear().range([0, quadrantWidth()]);
-        var xAxis = d3.axisBottom(_x);        
+        //定义坐标轴x
+        var xAxis = d3.axisBottom(_x)
+                        .tickSize(-quadrantHeight())
+                        .tickFormat(d3.format(",.0f"));        
 
+        //绘制坐标轴
         axesG.append("g")
                 .attr("class", "x axis")
                 .attr("transform", function () {
-                    return "translate(" + xStart() + "," + yStart() + ")";
+                   return "translate(" + xStart() + "," + yStart() + ")";
                 })
                 .call(xAxis);
-                
-        d3.selectAll("g.x g.tick")
-            .append("line")
-                .classed("grid-line", true)
-                .attr("x1", 0)
-                .attr("y1", 0)
-                .attr("x2", 0)
-                .attr("y2", - quadrantHeight());
+
+
+        //设置grid-line的样式
+        d3.selectAll("g.tick")
+            .classed("grid-line", true);
+        //设置坐标轴x边框样式
+        d3.selectAll("g.x path")
+            .classed("grid-line", true)
+
+
     }
     
     //渲染坐标轴-Y轴
     function renderYAxis(axesG){
-        //_y = d3.scaleLinear().range([quadrantHeight(), 0]);
-        var yAxis = d3.axisLeft(_y);
-                
+        //定义坐标轴y
+        var yAxis = d3.axisLeft(_y)
+                        .tickSize(-quadrantWidth())
+                        .tickFormat(d3.format(",.0f"));
+
+        //绘制坐标轴        
         axesG.append("g")
                 .attr("class", "y axis")
                 .attr("transform", function () {
                     return "translate(" + xStart() + "," + yEnd() + ")";
                 })
                 .call(yAxis);
-                
-         d3.selectAll("g.y g.tick")
-            .append("line")
-                .classed("grid-line", true)
-                .attr("x1", 0)
-                .attr("y1", 0)
-                .attr("x2", quadrantWidth())
-                .attr("y2", 0);
+         
+        //设置grid-line的样式       
+        d3.selectAll("g.tick line")
+            .classed("grid-line", true);
+        //设置坐标轴x边框样式
+        d3.selectAll("g.y path")
+            .classed("grid-line", true);
     }
 
     //定义剪裁

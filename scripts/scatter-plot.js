@@ -33,6 +33,7 @@ function scatterPlotChart () {
         renderBody(_svg);
     };
 
+
     //渲染坐标轴函数
     function renderAxes(svg) {
         var axesG = svg.append("g")
@@ -43,6 +44,7 @@ function scatterPlotChart () {
         renderYAxis(axesG);
     }
     
+
     //渲染坐标轴-X轴
     function renderXAxis(axesG){
         //定义坐标轴x
@@ -62,12 +64,14 @@ function scatterPlotChart () {
         //设置grid-line的样式
         d3.selectAll("g.tick")
             .classed("grid-line", true);
+
         //设置坐标轴x边框样式
         d3.selectAll("g.x path")
             .classed("grid-line", true)
 
 
     }
+
     
     //渲染坐标轴-Y轴
     function renderYAxis(axesG){
@@ -87,10 +91,12 @@ function scatterPlotChart () {
         //设置grid-line的样式       
         d3.selectAll("g.tick line")
             .classed("grid-line", true);
+
         //设置坐标轴x边框样式
         d3.selectAll("g.y path")
             .classed("grid-line", true);
     }
+
 
     //定义剪裁
     function defineBodyClip(svg) {
@@ -105,6 +111,7 @@ function scatterPlotChart () {
                 .attr("width", quadrantWidth() + 2 * padding)
                 .attr("height", quadrantHeight());
     }
+
 
     //渲染可视化主体
     function renderBody(svg) {
@@ -122,47 +129,52 @@ function scatterPlotChart () {
         addBrush();
     }
 
+
     //渲染符号函数
     function renderSymbols() { // <-B
-            
-        //enter
-        _bodyG.selectAll("circle").data(_data)
-                .enter()
-                .append("circle")
-                .attr("class", "dot");                 
-
-        //exit
-        _bodyG.selectAll("circle").data(_data)
-                .exit().remove();
+        var smb = _bodyG.selectAll("circle").data(_data);
 
         //update
-        _bodyG.selectAll("circle").data(_data)
-                .attr("r", 4.5)
-                .attr("cx", function(d) { return _x(d.A); })
-                .attr("cy", function(d) { return _y(d.PO); });
+        smb.attr("class","dot");
+
+        //exit
+        smb.exit().remove();
+
+        //enter
+        smb=smb.enter().append("circle")            
+            .attr("r",4.5)
+            .attr("cx", function(d) { return _x(d.A); })
+            .attr("cy", function(d) { return _y(d.PO); })
+            .merge(smb)
+            .attr("class","dot");
     }
+
 
     //添加交互笔刷函数
     function addBrush(){
+        //定义笔刷
         _brush = d3.brush()
             .extent([[0,0],[quadrantWidth(),quadrantHeight()]])
             .on('start',brushstart)
             .on('brush',brushmove)
             .on('end',brushend);
 
+        //调用笔刷
         _bodyG.call(_brush);
         var brushCell;
         var selectArray = new Array();
-        // Clear the previously-active brush, if any.
+
+        //清除已有笔刷
         function brushstart(p) {
             if (brushCell !== this) {
-              selectArray = new Array();
-              _bodyG.selectAll('.brush').call(_brush);
-              var selectArray = new Array();
-              brushCell = this;
+                selectArray = new Array();
+                _bodyG.selectAll('.brush').call(_brush);
+                //var selectArray = new Array();
+                brushCell = this;
             }
         }
-        // Highlight the selected circles.
+
+        //高亮备选散点.
         function brushmove(p) {
             var e=d3.event.selection;
             var xmin=e[0][0],xmax=e[1][0];
@@ -180,10 +192,10 @@ function scatterPlotChart () {
                 }else{
                     d3.select(this).classed('circle-hidden', true);
                 }
-            });
-            //salary_histogram.update(selectArray);
+            });            
         }
-        // If the brush is empty, select all circles.
+
+        // 如果笔刷为空，圈选散点
         function brushend(p) {
             var e=d3.event.selection;
             if(e != null){
@@ -196,11 +208,11 @@ function scatterPlotChart () {
             }else{
                 _bodyG.selectAll(".circle-hidden").classed("circle-hidden", false);
                 selectArray = new Array(); 
-            }
-            //salary_histogram.update(selectArray);
+            }            
         }
 
     }
+
 
     function xStart() {
         return _margins.left;
@@ -261,7 +273,6 @@ function scatterPlotChart () {
         _y = y;
         return _chart;
     };
-
 
     _chart.data = function (dt) {
         if (!arguments.length) return _data;

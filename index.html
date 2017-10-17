@@ -13,13 +13,45 @@
 
 
 	<div class="control-group">
-	    <button onclick="update()">Update</button>
+	    <!-- <button onclick="update()">Update</button> -->
 	</div>
 
 	<script type="text/javascript" src="libs/d3-dist/d3.v4.js"></script>
 	<script type="text/javascript" src="libs/jquery-dist/jquery.min.js"></script>
 	<script type="text/javascript" src="libs/less-dist/less.min.js"></script>
 	<script type="text/javascript" src="scripts/scatter-plot.js"></script>
+	<script type="text/javascript" src="scripts/bar-chart.js"></script>
+	<script type="text/javascript">
+		
+		//绘制Scatterplot
+		var chart = scatterPlotChart();
+
+		d3.csv("data/2015.csv", function(error, dataset) {
+		  if (error) throw error;
+		  dataset.forEach(function(d) {
+		    d.PO = +d.PO;
+		    d.A = +d.A;
+		    chart.pushData({x: d.A, y: d.PO});
+		  });
+		  chart.tx("A");
+		  chart.render();
+		});
+
+		//绘制Barchart
+		var barchart = barChart();
+
+		d3.csv("data/2015.csv", function(error, dataset) {
+		  if (error) throw error;
+		  dataset.forEach(function(d) {
+		    d.A = +d.A;
+		    d.Salaries = +d.Salaries;
+		    barchart.pushData({x: d.Salaries, y: d.A});
+		  });
+		  barchart.render();
+		});
+
+	</script>
+
 <!-- 	<script type="text/javascript" src="scripts/salary-histogram.js"></script>
 	<script type="text/javascript" src="scripts/main.js"></script> -->
 </body>

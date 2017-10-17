@@ -1,10 +1,9 @@
-function scatterPlotChart () {
+function barChart () {
     var _chart = {};
 
     var _width = 600, _height = 600,
         _margins = {top: 40, left: 40, right: 40, bottom: 40},
         _x, _y,
-        _tx, _ty,
         _data = [],
         _colors = d3.scaleOrdinal(d3.schemeCategory10),
         _svg,
@@ -87,15 +86,7 @@ function scatterPlotChart () {
                 .attr("transform", function () {
                     return "translate(" + xStart() + "," + yEnd() + ")";
                 })
-                .call(yAxis)
-                .append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
-                    .attr("text-anchor", "end")
-                    .attr("fill","#000")
-                    .attr("font-size","10px")
-                    .text("Frequency");
+                .call(yAxis);
          
         //设置grid-line的样式       
         d3.selectAll("g.tick line")
@@ -283,17 +274,6 @@ function scatterPlotChart () {
         return _chart;
     };
 
-    _chart.tx = function (tx) {
-        if (!arguments.length) return _tx;
-        _tx = tx;
-        return _chart;
-    };
-
-    _chart.ty = function (ty) {
-        if (!arguments.length) return _ty;
-        _ty = ty;
-        return _chart;
-    };
     _chart.data = function (dt) {
         if (!arguments.length) return _data;
     };
@@ -312,5 +292,6 @@ function scatterPlotChart () {
 
     return _chart;
 }
+
 
 

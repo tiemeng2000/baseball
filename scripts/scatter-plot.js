@@ -146,8 +146,8 @@ function scatterPlotChart () {
 
 
     //渲染符号函数
-    function renderSymbols() { // <-B
-        var smb = _bodyG.selectAll("circle").data(_data);
+    function renderSymbols() { 
+        var smb = _bodyG.selectAll(_symbolTypes).data(_data);
 
         //update
         smb.attr("class","dot");
@@ -156,8 +156,8 @@ function scatterPlotChart () {
         smb.exit().remove();
 
         //enter
-        smb=smb.enter().append("circle")            
-            .attr("r",4.5)
+        smb=smb.enter().append(_symbolTypes)            
+            .attr("r",2.5)
             .attr("cx", function(d) { return _x(d.x); })
             .attr("cy", function(d) { return _y(d.y); })
             .merge(smb)
@@ -276,6 +276,12 @@ function scatterPlotChart () {
         _colors = c;
         return _chart;
     };
+
+    _chart.symbolTypes = function(c){
+        if (!arguments.length) return _symbolTypes;
+        _symbolTypes = c;
+        return _symbolTypes;
+    }
 
     _chart.x = function (x) {
         if (!arguments.length) return _x;

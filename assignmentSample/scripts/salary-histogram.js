@@ -44,17 +44,22 @@ var salary_histogram = {
             return d.Salaries;
           });
           var salariesGap = self.salariesGap;
+
           self.arrayNum = Math.ceil(range[1]/salariesGap); 
           var arrayNum = self.arrayNum;
+
           self.array2d = new Array(arrayNum);
           var array2d = self.array2d;
+
           for(var jj = 0;jj < arrayNum;jj++){
             array2d[jj] = new Array();
           }
+
           for(var ii = 0;ii < data.length;ii++){
             var index = +Math.floor(data[ii].Salaries / salariesGap);
             array2d[index].push(data[ii].playerID);
           }
+
           var countObjArray = new Array();
           for(var ii = 0;ii < arrayNum;ii++){
             countObjArray[ii] = new Object();
@@ -65,6 +70,7 @@ var salary_histogram = {
             }
             countObjArray[ii].label = ii * salariesGap/1000 + 'k-' + (ii + 1) * salariesGap/1000 + 'k';
           }
+
           countObjArray.forEach(function(d) {
             d.num = +d.num;
           });
@@ -105,9 +111,7 @@ var salary_histogram = {
               .attr("class", "bar")
               .attr("x", function(d) { return x(d.label); })
               .attr("width", x.bandwidth() - 1)
-              .attr("y", function(d) { 
-                return y(+d.num); 
-              })
+              .attr("y", function(d) { return y(+d.num); })
               .attr("height", function(d) { return height - y(+d.num); })
               .on("click", function(d,i){
                   if(!d3.select(this).classed('rect-highlight')){

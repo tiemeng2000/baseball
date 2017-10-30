@@ -34,21 +34,11 @@
 		    chart.pushData({x: d.A, y: d.PO});
 		  });
 		  chart.tx("A");
+		  chart.ty("PO");
+		  chart.symbolTypes("circle");
 		  chart.render();
 		});
 
-		//绘制Barchart
-		var barchart = barChart();
-
-		d3.csv("data/2015.csv", function(error, dataset) {
-		  if (error) throw error;
-		  dataset.forEach(function(d) {
-		    d.A = +d.A;
-		    d.Salaries = +d.Salaries;
-		    barchart.pushData({x: d.Salaries, y: d.A});
-		  });
-		  barchart.render();
-		});
 
 	</script>
 

@@ -59,7 +59,14 @@ function scatterPlotChart () {
                 .attr("transform", function () {
                    return "translate(" + xStart() + "," + yStart() + ")";
                 })
-                .call(xAxis);
+                .call(xAxis)                
+                .append("text")                    
+                    .attr("x", quadrantWidth()+10)
+                    .attr("dx", "0.1em")
+                    .attr("text-anchor", "end")
+                    .attr("fill","#000")
+                    .attr("font-size","10px")
+                    .text(_tx);
 
 
         //设置grid-line的样式
@@ -89,13 +96,12 @@ function scatterPlotChart () {
                 })
                 .call(yAxis)
                 .append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
+                    .attr("y", -15)
+                    .attr("dy", "0.1em")
                     .attr("text-anchor", "end")
                     .attr("fill","#000")
                     .attr("font-size","10px")
-                    .text("Frequency");
+                    .text(_ty);
          
         //设置grid-line的样式       
         d3.selectAll("g.tick line")
@@ -178,7 +184,7 @@ function scatterPlotChart () {
             if (brushCell !== this) {
                 selectArray = new Array();
                 _bodyG.selectAll('.brush').call(_brush);
-                //var selectArray = new Array();
+                var selectArray = new Array();
                 brushCell = this;
             }
         }
